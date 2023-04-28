@@ -21,7 +21,7 @@ def main(args):
     X_train, X_test, y_train, y_test = split_data(df)
 
     # train model
-    train_model(args.reg_rate, X_train, X_test, y_train, y_test)
+    model = train_model(args.reg_rate, X_train, X_test, y_train, y_test)
 
 
 def get_csvs_df(path):
@@ -34,11 +34,20 @@ def get_csvs_df(path):
 
 
 # TO DO: add function to split data
-
+def split_data(df):
+    print("Splitting data ...")
+    response = ['Diabetic']
+    predictors = ['Pregnancies','PlasmaGlucose','DiastolicBloodPressure','TricepsThickness','SerumInsulin','BMI','DiabetesPedigree','Age']
+    X, y = df[predictors].values, df[response].values
+    
+    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.30, random_state = 0)
+    return X_train, X_test, y_train, y_test
+    
 
 def train_model(reg_rate, X_train, X_test, y_train, y_test):
-    # train model
-    LogisticRegression(C=1/reg_rate, solver="liblinear").fit(X_train, y_train)
+    print("Training model ...")
+    model = LogisticRegression(C=1/reg_rate, solver="liblinear").fit(X_train, y_train)    
+    return model
 
 
 def parse_args():
